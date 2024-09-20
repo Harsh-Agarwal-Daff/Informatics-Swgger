@@ -1,7 +1,7 @@
 {
   "swagger" : "2.0",
   "info" : {
-    "version" : "2024-09-20T08:48:18Z",
+    "version" : "2024-09-20T20:51:59Z",
     "title" : "dev-cart"
   },
   "host" : "rest.mycountyparks.com",
@@ -1080,6 +1080,38 @@
         } ]
       }
     },
+    "/user" : {
+      "post" : {
+        "summary" : "Insert or update user for cart",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "UpsertUserData",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/UpsertUserData"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/UserDetail"
+            }
+          },
+          "404" : {
+            "description" : "404 response",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorModel"
+            }
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      }
+    },
     "/valid" : {
       "get" : {
         "summary" : "Determine Cart Is valid Or Not",
@@ -1332,6 +1364,112 @@
         "message" : {
           "type" : "string",
           "description" : "Convenience fee validated successfully."
+        }
+      }
+    },
+    "UpsertUserData" : {
+      "type" : "object",
+      "required" : [ "address1", "billingAddress1", "billingCity", "billingEmail", "billingFax", "billingFirstName", "billingLastName", "billingPhone", "billingZip", "cartId", "city", "displayMode", "email", "firstName", "flagBillingInformation", "lastName", "phone", "state", "zip" ],
+      "properties" : {
+        "lastName" : {
+          "type" : "string",
+          "description" : "Last name of the user"
+        },
+        "city" : {
+          "type" : "string",
+          "description" : "City for the user's address"
+        },
+        "billingAddress2" : {
+          "type" : "string",
+          "description" : "Second line of the billing address (optional)"
+        },
+        "billingAddress1" : {
+          "type" : "string",
+          "description" : "First line of the billing address"
+        },
+        "password" : {
+          "type" : "string",
+          "description" : "User's password"
+        },
+        "billingEmail" : {
+          "type" : "string",
+          "description" : "Email address for billing notifications"
+        },
+        "billingFirstName" : {
+          "type" : "string",
+          "description" : "First name for billing information"
+        },
+        "billingFax" : {
+          "type" : "string",
+          "description" : "Fax number for billing contact"
+        },
+        "state" : {
+          "type" : "string",
+          "description" : "State for the user's address"
+        },
+        "fax" : {
+          "type" : "integer",
+          "description" : "Fax number for the user"
+        },
+        "email" : {
+          "type" : "string",
+          "description" : "Email address of the user"
+        },
+        "billingZip" : {
+          "type" : "string",
+          "description" : "ZIP code for the billing address"
+        },
+        "zip" : {
+          "type" : "string",
+          "description" : "ZIP code for the user's address"
+        },
+        "address2" : {
+          "type" : "string",
+          "description" : "Second line of the user address (optional)"
+        },
+        "address1" : {
+          "type" : "string",
+          "description" : "First line of the user address"
+        },
+        "cartId" : {
+          "type" : "string",
+          "description" : "Unique identifier for the cart"
+        },
+        "flagBillingInformation" : {
+          "type" : "string",
+          "description" : "Flag indicating if billing information is provided (0 or 1)"
+        },
+        "userId" : {
+          "type" : "string",
+          "description" : "Unique identifier for the user"
+        },
+        "displayMode" : {
+          "type" : "integer",
+          "description" : "Display mode preference for the user interface"
+        },
+        "firstName" : {
+          "type" : "string",
+          "description" : "First name of the user"
+        },
+        "billingLastName" : {
+          "type" : "string",
+          "description" : "Last name for billing information"
+        },
+        "phone" : {
+          "type" : "string",
+          "description" : "Phone number for the user"
+        },
+        "billingCity" : {
+          "type" : "string",
+          "description" : "City for the billing address"
+        },
+        "billingPhone" : {
+          "type" : "string",
+          "description" : "Phone number for billing contact"
+        },
+        "username" : {
+          "type" : "string",
+          "description" : "Username of the user"
         }
       }
     },
@@ -1963,6 +2101,185 @@
           "description" : "Order receipt build successfully"
         }
       }
+    },
+    "UserDetail" : {
+      "type" : "object",
+      "properties" : {
+        "result" : {
+          "type" : "object",
+          "properties" : {
+            "isLockedOut" : {
+              "type" : "boolean",
+              "description" : "false"
+            },
+            "lastName" : {
+              "type" : "string",
+              "description" : "Test"
+            },
+            "userStatus" : {
+              "type" : "string",
+              "description" : "Registered User"
+            },
+            "city" : {
+              "type" : "string",
+              "description" : "LA"
+            },
+            "isSendEmailChecked" : {
+              "type" : "string",
+              "description" : "1"
+            },
+            "genderID" : {
+              "type" : "integer",
+              "description" : "12"
+            },
+            "lastLoginDate" : {
+              "type" : "string",
+              "description" : "2024-05-29T12:08:55.293Z"
+            },
+            "billingAddress2" : {
+              "type" : "string",
+              "description" : "2nd Address Line"
+            },
+            "billingAddress1" : {
+              "type" : "string",
+              "description" : "1st address line"
+            },
+            "password" : {
+              "type" : "string",
+              "description" : "Mules123"
+            },
+            "dateCreated" : {
+              "type" : "string",
+              "description" : "2024-05-29T07:09:00.000Z"
+            },
+            "billingEmail" : {
+              "type" : "string",
+              "description" : "00.K.Bolt2@gmail.com"
+            },
+            "countyInterest" : {
+              "type" : "string",
+              "description" : "Array of county interests"
+            },
+            "billingFirstName" : {
+              "type" : "string",
+              "description" : "testB"
+            },
+            "state" : {
+              "type" : "string",
+              "description" : "LA"
+            },
+            "billingFax" : {
+              "type" : "string",
+              "description" : "999999994"
+            },
+            "isApproved" : {
+              "type" : "boolean",
+              "description" : "true"
+            },
+            "fax" : {
+              "type" : "string",
+              "description" : "999999993"
+            },
+            "ageID" : {
+              "type" : "integer",
+              "description" : "22"
+            },
+            "email" : {
+              "type" : "string",
+              "description" : "Vaalgaridn@gmaaail.com"
+            },
+            "flagOrganizationAdmin" : {
+              "type" : "string",
+              "description" : "null"
+            },
+            "billingZip" : {
+              "type" : "string",
+              "description" : "23423"
+            },
+            "zip" : {
+              "type" : "string",
+              "description" : "23423"
+            },
+            "raceID" : {
+              "type" : "integer",
+              "description" : "22"
+            },
+            "address2" : {
+              "type" : "string",
+              "description" : "2nd Address Line"
+            },
+            "address1" : {
+              "type" : "string",
+              "description" : "1st address line"
+            },
+            "flagWaitlistEmail" : {
+              "type" : "string",
+              "description" : "null"
+            },
+            "dateModified" : {
+              "type" : "string",
+              "description" : "null"
+            },
+            "billingState" : {
+              "type" : "string",
+              "description" : "LA"
+            },
+            "activityBIT" : {
+              "type" : "string",
+              "description" : "9672"
+            },
+            "userId" : {
+              "type" : "string",
+              "description" : "F1EE7934-1B83-4CC8-AAAB-EC188E21B89E"
+            },
+            "flagBillingInformation" : {
+              "type" : "string",
+              "description" : "0"
+            },
+            "parkID" : {
+              "type" : "string",
+              "description" : "null"
+            },
+            "firstName" : {
+              "type" : "string",
+              "description" : "test"
+            },
+            "billingLastName" : {
+              "type" : "string",
+              "description" : "TestB"
+            },
+            "phone" : {
+              "type" : "string",
+              "description" : "999999991"
+            },
+            "countyID" : {
+              "type" : "string",
+              "description" : "null"
+            },
+            "billingCity" : {
+              "type" : "string",
+              "description" : "LA"
+            },
+            "billingPhone" : {
+              "type" : "string",
+              "description" : "999999992"
+            },
+            "username" : {
+              "type" : "string",
+              "description" : ".Kristi1972"
+            }
+          }
+        },
+        "success" : {
+          "type" : "boolean",
+          "description" : "true"
+        },
+        "message" : {
+          "type" : "string",
+          "description" : "User modified successfully."
+        }
+      },
+      "description" : "Details of user."
     },
     "CountyIdSuccess" : {
       "type" : "object",
