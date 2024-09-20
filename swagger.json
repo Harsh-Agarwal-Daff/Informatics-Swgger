@@ -1,7 +1,7 @@
 {
   "swagger" : "2.0",
   "info" : {
-    "version" : "2024-09-20T08:38:25Z",
+    "version" : "2024-09-20T08:48:18Z",
     "title" : "dev-cart"
   },
   "host" : "rest.mycountyparks.com",
@@ -1192,7 +1192,131 @@
   },
   "definitions" : {
     "UpdateOrderData" : {
-      "type" : "object"
+      "type" : "object",
+      "required" : [ "billingAddress1", "billingAddress2", "billingCity", "billingEmail", "billingFax", "billingFirstName", "billingLastName", "billingPhone", "billingState", "billingZip", "cartId", "countyId", "discount", "discountTotal", "donationId", "employer", "flagExcludeProcessingFees", "machineName", "orderId", "orderTotal", "parkId", "payablePercent", "previousToken", "promoCode", "promoTotal", "token", "type", "userComment", "username" ],
+      "properties" : {
+        "payablePercent" : {
+          "type" : "number",
+          "format" : "float",
+          "description" : "Percentage of the amount to be paid"
+        },
+        "previousToken" : {
+          "type" : "string",
+          "description" : "Previous token for reference"
+        },
+        "orderId" : {
+          "type" : "string",
+          "description" : "Unique identifier for the order"
+        },
+        "discount" : {
+          "type" : "number",
+          "format" : "money",
+          "description" : "Discount amount applied to the order"
+        },
+        "donationId" : {
+          "type" : "integer",
+          "description" : "Identifier for the donation"
+        },
+        "type" : {
+          "type" : "string",
+          "description" : "Type of the order"
+        },
+        "parkId" : {
+          "type" : "integer",
+          "description" : "Identifier for the park"
+        },
+        "machineName" : {
+          "type" : "string",
+          "description" : "Name of the machine used to place the order"
+        },
+        "billingAddress2" : {
+          "type" : "string",
+          "description" : "Second line of the billing address"
+        },
+        "billingAddress1" : {
+          "type" : "string",
+          "description" : "First line of the billing address"
+        },
+        "billingEmail" : {
+          "type" : "string",
+          "description" : "Email address for billing notifications"
+        },
+        "countyId" : {
+          "type" : "integer",
+          "description" : "Identifier for the county"
+        },
+        "billingFirstName" : {
+          "type" : "string",
+          "description" : "First name of the billing contact"
+        },
+        "employer" : {
+          "type" : "string",
+          "description" : "Employer name"
+        },
+        "promoCode" : {
+          "type" : "string",
+          "description" : "Promotion code used for the order"
+        },
+        "billingFax" : {
+          "type" : "string",
+          "description" : "Fax number for the billing contact"
+        },
+        "billingZip" : {
+          "type" : "string",
+          "description" : "ZIP code for the billing address"
+        },
+        "cartId" : {
+          "type" : "string",
+          "description" : "The unique identifier for the cart"
+        },
+        "billingState" : {
+          "type" : "string",
+          "description" : "State for the billing address"
+        },
+        "flagExcludeProcessingFees" : {
+          "type" : "boolean",
+          "description" : "Flag to exclude processing fees"
+        },
+        "orderTotal" : {
+          "type" : "number",
+          "format" : "money",
+          "description" : "Total order amount after discounts and promotions"
+        },
+        "token" : {
+          "type" : "string",
+          "description" : "Token for processing the order"
+        },
+        "billingLastName" : {
+          "type" : "string",
+          "description" : "Last name of the billing contact"
+        },
+        "userComment" : {
+          "type" : "string",
+          "description" : "Comments from the user regarding the order"
+        },
+        "discountTotal" : {
+          "type" : "number",
+          "format" : "money",
+          "description" : "Total discount amount"
+        },
+        "promoTotal" : {
+          "type" : "number",
+          "format" : "money",
+          "description" : "Total amount of promotions applied"
+        },
+        "billingCity" : {
+          "type" : "string",
+          "description" : "City for the billing address"
+        },
+        "billingPhone" : {
+          "type" : "string",
+          "description" : "Phone number for the billing contact"
+        },
+        "username" : {
+          "type" : "string",
+          "description" : "Username of the person placing the order"
+        }
+      }
     },
     "ValidateConvenienceFeeSuccess" : {
       "type" : "object",
