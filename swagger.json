@@ -1,7 +1,7 @@
 {
   "swagger" : "2.0",
   "info" : {
-    "version" : "2024-09-21T12:27:21Z",
+    "version" : "2024-09-21T12:59:04Z",
     "title" : "dev-cart"
   },
   "host" : "rest.mycountyparks.com",
@@ -216,6 +216,38 @@
           },
           "500" : {
             "description" : "500 response",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorModel"
+            }
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      }
+    },
+    "/date-lock" : {
+      "post" : {
+        "summary" : "Insert Date Lock",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "AddDateLockData",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/AddDateLockData"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/SuccessModel"
+            }
+          },
+          "404" : {
+            "description" : "404 response",
             "schema" : {
               "$ref" : "#/definitions/ErrorModel"
             }
@@ -1285,6 +1317,714 @@
     }
   },
   "definitions" : {
+    "CountyStatusSuccess" : {
+      "type" : "object",
+      "properties" : {
+        "result" : {
+          "type" : "boolean",
+          "description" : "Status is active or not"
+        },
+        "success" : {
+          "type" : "boolean",
+          "description" : "true"
+        },
+        "message" : {
+          "type" : "string",
+          "description" : "County status fetched successfully."
+        }
+      }
+    },
+    "FacilityOrderData" : {
+      "type" : "object",
+      "required" : [ "cartId", "flagDelete", "fromDate", "itemId", "toDate" ],
+      "properties" : {
+        "flagConvenienceFee" : {
+          "type" : "integer",
+          "description" : "Flag to indicate if there is a convenience fee"
+        },
+        "lockBoxCode" : {
+          "type" : "string",
+          "description" : "Code for the lockbox"
+        },
+        "additionalFeeBit" : {
+          "type" : "integer",
+          "description" : "Flag to indicate if there is an additional fee"
+        },
+        "cartId" : {
+          "type" : "string",
+          "description" : "ID of the cart"
+        },
+        "toDate" : {
+          "type" : "string",
+          "description" : "End date and time"
+        },
+        "weekend" : {
+          "type" : "integer",
+          "description" : "Weekend rate"
+        },
+        "weekday" : {
+          "type" : "integer",
+          "description" : "Weekday rate"
+        },
+        "discountBit" : {
+          "type" : "integer",
+          "description" : "Flag to indicate if there is a discount"
+        },
+        "holiday" : {
+          "type" : "integer",
+          "description" : "Holiday rate"
+        },
+        "fromDate" : {
+          "type" : "string",
+          "description" : "Start date and time"
+        },
+        "itemId" : {
+          "type" : "integer",
+          "description" : "ID of the item"
+        },
+        "facilityActivityBit" : {
+          "type" : "integer",
+          "description" : "Flag to indicate facility activity"
+        },
+        "flagCompleted" : {
+          "type" : "integer",
+          "description" : "Flag to indicate if the order is completed"
+        },
+        "convenienceFee" : {
+          "type" : "number",
+          "description" : "Convenience fee amount"
+        },
+        "licensePlate" : {
+          "type" : "string",
+          "description" : "License plate number"
+        },
+        "flagDelete" : {
+          "type" : "integer",
+          "description" : "Flag to indicate if the item should be deleted"
+        },
+        "promoCode" : {
+          "type" : "string",
+          "description" : "Promotional code applied to the order"
+        },
+        "occupant" : {
+          "type" : "string",
+          "description" : "Occupant details"
+        },
+        "username" : {
+          "type" : "string",
+          "description" : "Username of the person making the order"
+        }
+      }
+    },
+    "InsertLogData" : { },
+    "ResetCartExpirationTimeSuccess" : {
+      "type" : "object",
+      "properties" : {
+        "result" : {
+          "type" : "object",
+          "properties" : {
+            "ExpirationTime" : {
+              "type" : "string"
+            }
+          }
+        },
+        "success" : {
+          "type" : "boolean",
+          "description" : "true"
+        },
+        "message" : {
+          "type" : "string",
+          "description" : "Cart time has been reset successfully"
+        }
+      }
+    },
+    "AuthorizeLogData" : {
+      "type" : "object",
+      "required" : [ "authorizeNetLogId", "cartId", "orderId", "orderReceipt", "userCreated", "validPayment" ],
+      "properties" : {
+        "authCode" : {
+          "type" : "string",
+          "description" : "Authorization code for the payment"
+        },
+        "orderId" : {
+          "type" : "string",
+          "description" : "Unique identifier for the order"
+        },
+        "orderReceipt" : {
+          "type" : "string",
+          "description" : "Receipt for the order",
+          "default" : ""
+        },
+        "cartId" : {
+          "type" : "string",
+          "description" : "Unique identifier for the cart"
+        },
+        "authorizeNetLogId" : {
+          "type" : "integer",
+          "description" : "Log ID for Authorize.Net transactions"
+        },
+        "errorMessage" : {
+          "type" : "string",
+          "description" : "Error message if the payment fails"
+        },
+        "validPayment" : {
+          "type" : "boolean",
+          "description" : "Indicates whether the payment is valid"
+        },
+        "flagOrgEvent" : {
+          "type" : "boolean",
+          "description" : "Flag indicating if this is an organizational event"
+        },
+        "userCreated" : {
+          "type" : "string",
+          "description" : "Identifier for the user who created the order"
+        },
+        "transactionId" : {
+          "type" : "string",
+          "description" : "Unique identifier for the payment transaction"
+        },
+        "machineName" : {
+          "type" : "string",
+          "description" : "Name of the machine used to create the order",
+          "default" : ""
+        },
+        "responseCode" : {
+          "type" : "string",
+          "description" : "Response code from the payment gateway"
+        }
+      }
+    },
+    "UserDetail" : {
+      "type" : "object",
+      "properties" : {
+        "result" : {
+          "type" : "object",
+          "properties" : {
+            "isLockedOut" : {
+              "type" : "boolean",
+              "description" : "false"
+            },
+            "lastName" : {
+              "type" : "string",
+              "description" : "Test"
+            },
+            "userStatus" : {
+              "type" : "string",
+              "description" : "Registered User"
+            },
+            "city" : {
+              "type" : "string",
+              "description" : "LA"
+            },
+            "isSendEmailChecked" : {
+              "type" : "string",
+              "description" : "1"
+            },
+            "genderID" : {
+              "type" : "integer",
+              "description" : "12"
+            },
+            "lastLoginDate" : {
+              "type" : "string",
+              "description" : "2024-05-29T12:08:55.293Z"
+            },
+            "billingAddress2" : {
+              "type" : "string",
+              "description" : "2nd Address Line"
+            },
+            "billingAddress1" : {
+              "type" : "string",
+              "description" : "1st address line"
+            },
+            "password" : {
+              "type" : "string",
+              "description" : "Mules123"
+            },
+            "dateCreated" : {
+              "type" : "string",
+              "description" : "2024-05-29T07:09:00.000Z"
+            },
+            "billingEmail" : {
+              "type" : "string",
+              "description" : "00.K.Bolt2@gmail.com"
+            },
+            "countyInterest" : {
+              "type" : "string",
+              "description" : "Array of county interests"
+            },
+            "billingFirstName" : {
+              "type" : "string",
+              "description" : "testB"
+            },
+            "state" : {
+              "type" : "string",
+              "description" : "LA"
+            },
+            "billingFax" : {
+              "type" : "string",
+              "description" : "999999994"
+            },
+            "isApproved" : {
+              "type" : "boolean",
+              "description" : "true"
+            },
+            "fax" : {
+              "type" : "string",
+              "description" : "999999993"
+            },
+            "ageID" : {
+              "type" : "integer",
+              "description" : "22"
+            },
+            "email" : {
+              "type" : "string",
+              "description" : "Vaalgaridn@gmaaail.com"
+            },
+            "flagOrganizationAdmin" : {
+              "type" : "string",
+              "description" : "null"
+            },
+            "billingZip" : {
+              "type" : "string",
+              "description" : "23423"
+            },
+            "zip" : {
+              "type" : "string",
+              "description" : "23423"
+            },
+            "raceID" : {
+              "type" : "integer",
+              "description" : "22"
+            },
+            "address2" : {
+              "type" : "string",
+              "description" : "2nd Address Line"
+            },
+            "address1" : {
+              "type" : "string",
+              "description" : "1st address line"
+            },
+            "flagWaitlistEmail" : {
+              "type" : "string",
+              "description" : "null"
+            },
+            "dateModified" : {
+              "type" : "string",
+              "description" : "null"
+            },
+            "billingState" : {
+              "type" : "string",
+              "description" : "LA"
+            },
+            "activityBIT" : {
+              "type" : "string",
+              "description" : "9672"
+            },
+            "userId" : {
+              "type" : "string",
+              "description" : "F1EE7934-1B83-4CC8-AAAB-EC188E21B89E"
+            },
+            "flagBillingInformation" : {
+              "type" : "string",
+              "description" : "0"
+            },
+            "parkID" : {
+              "type" : "string",
+              "description" : "null"
+            },
+            "firstName" : {
+              "type" : "string",
+              "description" : "test"
+            },
+            "billingLastName" : {
+              "type" : "string",
+              "description" : "TestB"
+            },
+            "phone" : {
+              "type" : "string",
+              "description" : "999999991"
+            },
+            "countyID" : {
+              "type" : "string",
+              "description" : "null"
+            },
+            "billingCity" : {
+              "type" : "string",
+              "description" : "LA"
+            },
+            "billingPhone" : {
+              "type" : "string",
+              "description" : "999999992"
+            },
+            "username" : {
+              "type" : "string",
+              "description" : ".Kristi1972"
+            }
+          }
+        },
+        "success" : {
+          "type" : "boolean",
+          "description" : "true"
+        },
+        "message" : {
+          "type" : "string",
+          "description" : "User modified successfully."
+        }
+      },
+      "description" : "Details of user."
+    },
+    "CountyIdSuccess" : {
+      "type" : "object",
+      "properties" : {
+        "result" : {
+          "type" : "object",
+          "properties" : {
+            "CountyID" : {
+              "type" : "integer",
+              "description" : "Unique identifier for the county"
+            }
+          }
+        },
+        "success" : {
+          "type" : "boolean",
+          "description" : "true"
+        },
+        "message" : {
+          "type" : "string",
+          "description" : "County id fetched successfully."
+        }
+      }
+    },
+    "InvalidCartItemSuccess" : {
+      "type" : "object",
+      "properties" : {
+        "result" : {
+          "type" : "array",
+          "items" : {
+            "type" : "object",
+            "properties" : {
+              "FacilityID" : {
+                "type" : "string",
+                "description" : "Unique identifier for the job."
+              },
+              "Name" : {
+                "type" : "string",
+                "description" : "Name of the facility"
+              }
+            }
+          }
+        },
+        "success" : {
+          "type" : "boolean",
+          "description" : "true"
+        },
+        "message" : {
+          "type" : "string",
+          "description" : "Invalid cart items fetched successfully"
+        }
+      }
+    },
+    "CartDetailSuccess" : {
+      "type" : "object",
+      "properties" : {
+        "result" : {
+          "type" : "object",
+          "properties" : {
+            "eventCartItems" : {
+              "type" : "array",
+              "items" : {
+                "type" : "object",
+                "properties" : { }
+              }
+            },
+            "cartDetails" : {
+              "type" : "array",
+              "items" : {
+                "type" : "object",
+                "properties" : {
+                  "CheckOutTime" : {
+                    "type" : "string"
+                  },
+                  "FlagPayAtSite" : {
+                    "type" : "integer"
+                  },
+                  "PromoCode" : {
+                    "type" : "string"
+                  },
+                  "DisplayBIT" : {
+                    "type" : "integer"
+                  },
+                  "EventType" : {
+                    "type" : "string"
+                  },
+                  "Occupant" : {
+                    "type" : "string"
+                  },
+                  "ReservationURL" : {
+                    "type" : "string"
+                  },
+                  "FlagLockBox" : {
+                    "type" : "integer"
+                  },
+                  "FlagLicensePlate" : {
+                    "type" : "integer"
+                  },
+                  "County" : {
+                    "type" : "string"
+                  },
+                  "Name" : {
+                    "type" : "string"
+                  },
+                  "DescRefundPolicy" : {
+                    "type" : "string"
+                  },
+                  "FacilityID" : {
+                    "type" : "integer"
+                  },
+                  "FlagCompleted" : {
+                    "type" : "integer"
+                  },
+                  "MaxOccupancy" : {
+                    "type" : "string"
+                  },
+                  "MinCheckIn" : {
+                    "type" : "string",
+                    "format" : "date-time"
+                  },
+                  "CheckInTime" : {
+                    "type" : "string"
+                  },
+                  "NameFirst" : {
+                    "type" : "string"
+                  },
+                  "DescYouthGroup" : {
+                    "type" : "string"
+                  },
+                  "LockBoxCode" : {
+                    "type" : "string"
+                  },
+                  "DescCancelationPolicy" : {
+                    "type" : "string"
+                  },
+                  "FlagConvenienceFee" : {
+                    "type" : "integer"
+                  },
+                  "AdditionalFeesBIT" : {
+                    "type" : "string"
+                  },
+                  "LicensePlate" : {
+                    "type" : "string"
+                  },
+                  "NameLast" : {
+                    "type" : "string"
+                  },
+                  "CountyID" : {
+                    "type" : "integer"
+                  },
+                  "ConvenienceFee" : {
+                    "type" : "integer"
+                  },
+                  "EventName" : {
+                    "type" : "string"
+                  },
+                  "MaxCheckOut" : {
+                    "type" : "string",
+                    "format" : "date-time"
+                  },
+                  "ItemID" : {
+                    "type" : "integer"
+                  },
+                  "CartItemID" : {
+                    "type" : "integer"
+                  },
+                  "Park" : {
+                    "type" : "string"
+                  },
+                  "Type" : {
+                    "type" : "string"
+                  },
+                  "NoOfDays" : {
+                    "type" : "integer"
+                  },
+                  "Username" : {
+                    "type" : "string"
+                  },
+                  "Total" : {
+                    "type" : "integer"
+                  },
+                  "FromDate" : {
+                    "type" : "string",
+                    "format" : "date-time"
+                  },
+                  "ToDate" : {
+                    "type" : "string",
+                    "format" : "date-time"
+                  },
+                  "UserRegistrationType" : {
+                    "type" : "string"
+                  },
+                  "Waiver" : {
+                    "type" : "string"
+                  },
+                  "FacilityURL" : {
+                    "type" : "string"
+                  },
+                  "FacilityType" : {
+                    "type" : "array",
+                    "items" : {
+                      "type" : "string"
+                    }
+                  },
+                  "DescRentalContract" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "success" : {
+          "type" : "boolean",
+          "description" : "true"
+        },
+        "message" : {
+          "type" : "string",
+          "description" : "Cart details fetched successfully"
+        }
+      }
+    },
+    "DeleteEventOrderData" : {
+      "type" : "object",
+      "required" : [ "cartId", "registrationId", "username" ],
+      "properties" : {
+        "previousItemURLInvalidCart" : {
+          "type" : "string",
+          "description" : "item url of previous invalid cart"
+        },
+        "parkToAddInvalidCart" : {
+          "type" : "integer",
+          "description" : "park to add in invalid cart"
+        },
+        "cartId" : {
+          "type" : "string",
+          "description" : "Identifier for the shopping cart"
+        },
+        "registrationId" : {
+          "type" : "integer",
+          "description" : "Unique identifier for the registration"
+        },
+        "message" : {
+          "type" : "string",
+          "description" : "error message"
+        },
+        "username" : {
+          "type" : "string",
+          "description" : "Username of the person registering"
+        }
+      }
+    },
+    "EventOrderData" : {
+      "type" : "object",
+      "required" : [ "adults", "cartId", "children", "eventId", "flagAdminOrder", "registrationId", "username" ],
+      "properties" : {
+        "teamName" : {
+          "type" : "string",
+          "description" : "Name of the team if applicable"
+        },
+        "flagAdminOrder" : {
+          "type" : "boolean",
+          "description" : "Flag indicating if this is an admin order"
+        },
+        "eventId" : {
+          "type" : "integer",
+          "description" : "Unique identifier for the event"
+        },
+        "userRegistrationType" : {
+          "type" : "string",
+          "description" : "Type of registration for the user"
+        },
+        "children" : {
+          "type" : "integer",
+          "description" : "Number of children attending"
+        },
+        "familyFee" : {
+          "type" : "number",
+          "format" : "float",
+          "description" : "Fee applicable for family registrations"
+        },
+        "cartId" : {
+          "type" : "string",
+          "description" : "Identifier for the shopping cart"
+        },
+        "adults" : {
+          "type" : "integer",
+          "description" : "Number of adults attending"
+        },
+        "registrationId" : {
+          "type" : "integer",
+          "description" : "Unique identifier for the registration"
+        },
+        "eventQuestions" : {
+          "type" : "array",
+          "items" : {
+            "type" : "object",
+            "properties" : {
+              "answerTypeId" : {
+                "type" : "string",
+                "description" : "Id for the answer"
+              },
+              "fileName" : {
+                "type" : "string",
+                "description" : "Name of the uploaded file associated with the question"
+              },
+              "answer" : {
+                "type" : "string",
+                "description" : "contains id or answer value"
+              },
+              "questionGuid" : {
+                "type" : "string",
+                "description" : "Unique identifier for the question"
+              },
+              "mimeType" : {
+                "type" : "string",
+                "description" : "MIME type of the uploaded file"
+              }
+            },
+            "required" : [ "answer", "answerTypeId", "questionGuid" ]
+          }
+        },
+        "username" : {
+          "type" : "string",
+          "description" : "Username of the person registering"
+        }
+      }
+    },
+    "CartFacilityTimeSuccess" : {
+      "type" : "object",
+      "properties" : {
+        "result" : {
+          "type" : "object",
+          "properties" : {
+            "ExpirationTime" : {
+              "type" : "string",
+              "description" : "Cart facility expiration time"
+            },
+            "CurrentDate" : {
+              "type" : "string",
+              "description" : "Current date and time"
+            }
+          }
+        },
+        "success" : {
+          "type" : "boolean",
+          "description" : "true"
+        },
+        "message" : {
+          "type" : "string",
+          "description" : "County status fetched successfully."
+        }
+      }
+    },
     "UpdateOrderData" : {
       "type" : "object",
       "required" : [ "billingAddress1", "billingAddress2", "billingCity", "billingEmail", "billingFax", "billingFirstName", "billingLastName", "billingPhone", "billingState", "billingZip", "cartId", "countyId", "discount", "discountTotal", "donationId", "employer", "flagExcludeProcessingFees", "machineName", "orderId", "orderTotal", "parkId", "payablePercent", "previousToken", "promoCode", "promoTotal", "token", "type", "userComment", "username" ],
@@ -1426,6 +2166,16 @@
         "message" : {
           "type" : "string",
           "description" : "Convenience fee validated successfully."
+        }
+      }
+    },
+    "AddDateLockData" : {
+      "type" : "object",
+      "required" : [ "cartId" ],
+      "properties" : {
+        "cartId" : {
+          "type" : "string",
+          "description" : "The unique identifier for the cart"
         }
       }
     },
@@ -1661,23 +2411,6 @@
         }
       }
     },
-    "CountyStatusSuccess" : {
-      "type" : "object",
-      "properties" : {
-        "result" : {
-          "type" : "boolean",
-          "description" : "Status is active or not"
-        },
-        "success" : {
-          "type" : "boolean",
-          "description" : "true"
-        },
-        "message" : {
-          "type" : "string",
-          "description" : "County status fetched successfully."
-        }
-      }
-    },
     "SuccessModel" : {
       "type" : "object",
       "properties" : {
@@ -1688,166 +2421,6 @@
         "message" : {
           "type" : "string",
           "description" : "success message"
-        }
-      }
-    },
-    "FacilityOrderData" : {
-      "type" : "object",
-      "required" : [ "cartId", "flagDelete", "fromDate", "itemId", "toDate" ],
-      "properties" : {
-        "flagConvenienceFee" : {
-          "type" : "integer",
-          "description" : "Flag to indicate if there is a convenience fee"
-        },
-        "lockBoxCode" : {
-          "type" : "string",
-          "description" : "Code for the lockbox"
-        },
-        "additionalFeeBit" : {
-          "type" : "integer",
-          "description" : "Flag to indicate if there is an additional fee"
-        },
-        "cartId" : {
-          "type" : "string",
-          "description" : "ID of the cart"
-        },
-        "toDate" : {
-          "type" : "string",
-          "description" : "End date and time"
-        },
-        "weekend" : {
-          "type" : "integer",
-          "description" : "Weekend rate"
-        },
-        "weekday" : {
-          "type" : "integer",
-          "description" : "Weekday rate"
-        },
-        "discountBit" : {
-          "type" : "integer",
-          "description" : "Flag to indicate if there is a discount"
-        },
-        "holiday" : {
-          "type" : "integer",
-          "description" : "Holiday rate"
-        },
-        "fromDate" : {
-          "type" : "string",
-          "description" : "Start date and time"
-        },
-        "itemId" : {
-          "type" : "integer",
-          "description" : "ID of the item"
-        },
-        "facilityActivityBit" : {
-          "type" : "integer",
-          "description" : "Flag to indicate facility activity"
-        },
-        "flagCompleted" : {
-          "type" : "integer",
-          "description" : "Flag to indicate if the order is completed"
-        },
-        "convenienceFee" : {
-          "type" : "number",
-          "description" : "Convenience fee amount"
-        },
-        "licensePlate" : {
-          "type" : "string",
-          "description" : "License plate number"
-        },
-        "flagDelete" : {
-          "type" : "integer",
-          "description" : "Flag to indicate if the item should be deleted"
-        },
-        "promoCode" : {
-          "type" : "string",
-          "description" : "Promotional code applied to the order"
-        },
-        "occupant" : {
-          "type" : "string",
-          "description" : "Occupant details"
-        },
-        "username" : {
-          "type" : "string",
-          "description" : "Username of the person making the order"
-        }
-      }
-    },
-    "InsertLogData" : { },
-    "ResetCartExpirationTimeSuccess" : {
-      "type" : "object",
-      "properties" : {
-        "result" : {
-          "type" : "object",
-          "properties" : {
-            "ExpirationTime" : {
-              "type" : "string"
-            }
-          }
-        },
-        "success" : {
-          "type" : "boolean",
-          "description" : "true"
-        },
-        "message" : {
-          "type" : "string",
-          "description" : "Cart time has been reset successfully"
-        }
-      }
-    },
-    "AuthorizeLogData" : {
-      "type" : "object",
-      "required" : [ "authorizeNetLogId", "cartId", "orderId", "orderReceipt", "userCreated", "validPayment" ],
-      "properties" : {
-        "authCode" : {
-          "type" : "string",
-          "description" : "Authorization code for the payment"
-        },
-        "orderId" : {
-          "type" : "string",
-          "description" : "Unique identifier for the order"
-        },
-        "orderReceipt" : {
-          "type" : "string",
-          "description" : "Receipt for the order",
-          "default" : ""
-        },
-        "cartId" : {
-          "type" : "string",
-          "description" : "Unique identifier for the cart"
-        },
-        "authorizeNetLogId" : {
-          "type" : "integer",
-          "description" : "Log ID for Authorize.Net transactions"
-        },
-        "errorMessage" : {
-          "type" : "string",
-          "description" : "Error message if the payment fails"
-        },
-        "validPayment" : {
-          "type" : "boolean",
-          "description" : "Indicates whether the payment is valid"
-        },
-        "flagOrgEvent" : {
-          "type" : "boolean",
-          "description" : "Flag indicating if this is an organizational event"
-        },
-        "userCreated" : {
-          "type" : "string",
-          "description" : "Identifier for the user who created the order"
-        },
-        "transactionId" : {
-          "type" : "string",
-          "description" : "Unique identifier for the payment transaction"
-        },
-        "machineName" : {
-          "type" : "string",
-          "description" : "Name of the machine used to create the order",
-          "default" : ""
-        },
-        "responseCode" : {
-          "type" : "string",
-          "description" : "Response code from the payment gateway"
         }
       }
     },
@@ -2220,207 +2793,6 @@
         }
       }
     },
-    "UserDetail" : {
-      "type" : "object",
-      "properties" : {
-        "result" : {
-          "type" : "object",
-          "properties" : {
-            "isLockedOut" : {
-              "type" : "boolean",
-              "description" : "false"
-            },
-            "lastName" : {
-              "type" : "string",
-              "description" : "Test"
-            },
-            "userStatus" : {
-              "type" : "string",
-              "description" : "Registered User"
-            },
-            "city" : {
-              "type" : "string",
-              "description" : "LA"
-            },
-            "isSendEmailChecked" : {
-              "type" : "string",
-              "description" : "1"
-            },
-            "genderID" : {
-              "type" : "integer",
-              "description" : "12"
-            },
-            "lastLoginDate" : {
-              "type" : "string",
-              "description" : "2024-05-29T12:08:55.293Z"
-            },
-            "billingAddress2" : {
-              "type" : "string",
-              "description" : "2nd Address Line"
-            },
-            "billingAddress1" : {
-              "type" : "string",
-              "description" : "1st address line"
-            },
-            "password" : {
-              "type" : "string",
-              "description" : "Mules123"
-            },
-            "dateCreated" : {
-              "type" : "string",
-              "description" : "2024-05-29T07:09:00.000Z"
-            },
-            "billingEmail" : {
-              "type" : "string",
-              "description" : "00.K.Bolt2@gmail.com"
-            },
-            "countyInterest" : {
-              "type" : "string",
-              "description" : "Array of county interests"
-            },
-            "billingFirstName" : {
-              "type" : "string",
-              "description" : "testB"
-            },
-            "state" : {
-              "type" : "string",
-              "description" : "LA"
-            },
-            "billingFax" : {
-              "type" : "string",
-              "description" : "999999994"
-            },
-            "isApproved" : {
-              "type" : "boolean",
-              "description" : "true"
-            },
-            "fax" : {
-              "type" : "string",
-              "description" : "999999993"
-            },
-            "ageID" : {
-              "type" : "integer",
-              "description" : "22"
-            },
-            "email" : {
-              "type" : "string",
-              "description" : "Vaalgaridn@gmaaail.com"
-            },
-            "flagOrganizationAdmin" : {
-              "type" : "string",
-              "description" : "null"
-            },
-            "billingZip" : {
-              "type" : "string",
-              "description" : "23423"
-            },
-            "zip" : {
-              "type" : "string",
-              "description" : "23423"
-            },
-            "raceID" : {
-              "type" : "integer",
-              "description" : "22"
-            },
-            "address2" : {
-              "type" : "string",
-              "description" : "2nd Address Line"
-            },
-            "address1" : {
-              "type" : "string",
-              "description" : "1st address line"
-            },
-            "flagWaitlistEmail" : {
-              "type" : "string",
-              "description" : "null"
-            },
-            "dateModified" : {
-              "type" : "string",
-              "description" : "null"
-            },
-            "billingState" : {
-              "type" : "string",
-              "description" : "LA"
-            },
-            "activityBIT" : {
-              "type" : "string",
-              "description" : "9672"
-            },
-            "userId" : {
-              "type" : "string",
-              "description" : "F1EE7934-1B83-4CC8-AAAB-EC188E21B89E"
-            },
-            "flagBillingInformation" : {
-              "type" : "string",
-              "description" : "0"
-            },
-            "parkID" : {
-              "type" : "string",
-              "description" : "null"
-            },
-            "firstName" : {
-              "type" : "string",
-              "description" : "test"
-            },
-            "billingLastName" : {
-              "type" : "string",
-              "description" : "TestB"
-            },
-            "phone" : {
-              "type" : "string",
-              "description" : "999999991"
-            },
-            "countyID" : {
-              "type" : "string",
-              "description" : "null"
-            },
-            "billingCity" : {
-              "type" : "string",
-              "description" : "LA"
-            },
-            "billingPhone" : {
-              "type" : "string",
-              "description" : "999999992"
-            },
-            "username" : {
-              "type" : "string",
-              "description" : ".Kristi1972"
-            }
-          }
-        },
-        "success" : {
-          "type" : "boolean",
-          "description" : "true"
-        },
-        "message" : {
-          "type" : "string",
-          "description" : "User modified successfully."
-        }
-      },
-      "description" : "Details of user."
-    },
-    "CountyIdSuccess" : {
-      "type" : "object",
-      "properties" : {
-        "result" : {
-          "type" : "object",
-          "properties" : {
-            "CountyID" : {
-              "type" : "integer",
-              "description" : "Unique identifier for the county"
-            }
-          }
-        },
-        "success" : {
-          "type" : "boolean",
-          "description" : "true"
-        },
-        "message" : {
-          "type" : "string",
-          "description" : "County id fetched successfully."
-        }
-      }
-    },
     "InvalidRegEventsSuccess" : {
       "type" : "object",
       "properties" : {
@@ -2602,234 +2974,6 @@
         }
       }
     },
-    "InvalidCartItemSuccess" : {
-      "type" : "object",
-      "properties" : {
-        "result" : {
-          "type" : "array",
-          "items" : {
-            "type" : "object",
-            "properties" : {
-              "FacilityID" : {
-                "type" : "string",
-                "description" : "Unique identifier for the job."
-              },
-              "Name" : {
-                "type" : "string",
-                "description" : "Name of the facility"
-              }
-            }
-          }
-        },
-        "success" : {
-          "type" : "boolean",
-          "description" : "true"
-        },
-        "message" : {
-          "type" : "string",
-          "description" : "Invalid cart items fetched successfully"
-        }
-      }
-    },
-    "CartDetailSuccess" : {
-      "type" : "object",
-      "properties" : {
-        "result" : {
-          "type" : "object",
-          "properties" : {
-            "eventCartItems" : {
-              "type" : "array",
-              "items" : {
-                "type" : "object",
-                "properties" : { }
-              }
-            },
-            "cartDetails" : {
-              "type" : "array",
-              "items" : {
-                "type" : "object",
-                "properties" : {
-                  "CheckOutTime" : {
-                    "type" : "string"
-                  },
-                  "FlagPayAtSite" : {
-                    "type" : "integer"
-                  },
-                  "PromoCode" : {
-                    "type" : "string"
-                  },
-                  "DisplayBIT" : {
-                    "type" : "integer"
-                  },
-                  "EventType" : {
-                    "type" : "string"
-                  },
-                  "Occupant" : {
-                    "type" : "string"
-                  },
-                  "ReservationURL" : {
-                    "type" : "string"
-                  },
-                  "FlagLockBox" : {
-                    "type" : "integer"
-                  },
-                  "FlagLicensePlate" : {
-                    "type" : "integer"
-                  },
-                  "County" : {
-                    "type" : "string"
-                  },
-                  "Name" : {
-                    "type" : "string"
-                  },
-                  "DescRefundPolicy" : {
-                    "type" : "string"
-                  },
-                  "FacilityID" : {
-                    "type" : "integer"
-                  },
-                  "FlagCompleted" : {
-                    "type" : "integer"
-                  },
-                  "MaxOccupancy" : {
-                    "type" : "string"
-                  },
-                  "MinCheckIn" : {
-                    "type" : "string",
-                    "format" : "date-time"
-                  },
-                  "CheckInTime" : {
-                    "type" : "string"
-                  },
-                  "NameFirst" : {
-                    "type" : "string"
-                  },
-                  "DescYouthGroup" : {
-                    "type" : "string"
-                  },
-                  "LockBoxCode" : {
-                    "type" : "string"
-                  },
-                  "DescCancelationPolicy" : {
-                    "type" : "string"
-                  },
-                  "FlagConvenienceFee" : {
-                    "type" : "integer"
-                  },
-                  "AdditionalFeesBIT" : {
-                    "type" : "string"
-                  },
-                  "LicensePlate" : {
-                    "type" : "string"
-                  },
-                  "NameLast" : {
-                    "type" : "string"
-                  },
-                  "CountyID" : {
-                    "type" : "integer"
-                  },
-                  "ConvenienceFee" : {
-                    "type" : "integer"
-                  },
-                  "EventName" : {
-                    "type" : "string"
-                  },
-                  "MaxCheckOut" : {
-                    "type" : "string",
-                    "format" : "date-time"
-                  },
-                  "ItemID" : {
-                    "type" : "integer"
-                  },
-                  "CartItemID" : {
-                    "type" : "integer"
-                  },
-                  "Park" : {
-                    "type" : "string"
-                  },
-                  "Type" : {
-                    "type" : "string"
-                  },
-                  "NoOfDays" : {
-                    "type" : "integer"
-                  },
-                  "Username" : {
-                    "type" : "string"
-                  },
-                  "Total" : {
-                    "type" : "integer"
-                  },
-                  "FromDate" : {
-                    "type" : "string",
-                    "format" : "date-time"
-                  },
-                  "ToDate" : {
-                    "type" : "string",
-                    "format" : "date-time"
-                  },
-                  "UserRegistrationType" : {
-                    "type" : "string"
-                  },
-                  "Waiver" : {
-                    "type" : "string"
-                  },
-                  "FacilityURL" : {
-                    "type" : "string"
-                  },
-                  "FacilityType" : {
-                    "type" : "array",
-                    "items" : {
-                      "type" : "string"
-                    }
-                  },
-                  "DescRentalContract" : {
-                    "type" : "string"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "success" : {
-          "type" : "boolean",
-          "description" : "true"
-        },
-        "message" : {
-          "type" : "string",
-          "description" : "Cart details fetched successfully"
-        }
-      }
-    },
-    "DeleteEventOrderData" : {
-      "type" : "object",
-      "required" : [ "cartId", "registrationId", "username" ],
-      "properties" : {
-        "previousItemURLInvalidCart" : {
-          "type" : "string",
-          "description" : "item url of previous invalid cart"
-        },
-        "parkToAddInvalidCart" : {
-          "type" : "integer",
-          "description" : "park to add in invalid cart"
-        },
-        "cartId" : {
-          "type" : "string",
-          "description" : "Identifier for the shopping cart"
-        },
-        "registrationId" : {
-          "type" : "integer",
-          "description" : "Unique identifier for the registration"
-        },
-        "message" : {
-          "type" : "string",
-          "description" : "error message"
-        },
-        "username" : {
-          "type" : "string",
-          "description" : "Username of the person registering"
-        }
-      }
-    },
     "ErrorModel" : {
       "type" : "object",
       "properties" : {
@@ -2874,82 +3018,6 @@
         "message" : {
           "type" : "string",
           "description" : "A message describing the result of the operation"
-        }
-      }
-    },
-    "EventOrderData" : {
-      "type" : "object",
-      "required" : [ "adults", "cartId", "children", "eventId", "flagAdminOrder", "registrationId", "username" ],
-      "properties" : {
-        "teamName" : {
-          "type" : "string",
-          "description" : "Name of the team if applicable"
-        },
-        "flagAdminOrder" : {
-          "type" : "boolean",
-          "description" : "Flag indicating if this is an admin order"
-        },
-        "eventId" : {
-          "type" : "integer",
-          "description" : "Unique identifier for the event"
-        },
-        "userRegistrationType" : {
-          "type" : "string",
-          "description" : "Type of registration for the user"
-        },
-        "children" : {
-          "type" : "integer",
-          "description" : "Number of children attending"
-        },
-        "familyFee" : {
-          "type" : "number",
-          "format" : "float",
-          "description" : "Fee applicable for family registrations"
-        },
-        "cartId" : {
-          "type" : "string",
-          "description" : "Identifier for the shopping cart"
-        },
-        "adults" : {
-          "type" : "integer",
-          "description" : "Number of adults attending"
-        },
-        "registrationId" : {
-          "type" : "integer",
-          "description" : "Unique identifier for the registration"
-        },
-        "eventQuestions" : {
-          "type" : "array",
-          "items" : {
-            "type" : "object",
-            "properties" : {
-              "answerTypeId" : {
-                "type" : "string",
-                "description" : "Id for the answer"
-              },
-              "fileName" : {
-                "type" : "string",
-                "description" : "Name of the uploaded file associated with the question"
-              },
-              "answer" : {
-                "type" : "string",
-                "description" : "contains id or answer value"
-              },
-              "questionGuid" : {
-                "type" : "string",
-                "description" : "Unique identifier for the question"
-              },
-              "mimeType" : {
-                "type" : "string",
-                "description" : "MIME type of the uploaded file"
-              }
-            },
-            "required" : [ "answer", "answerTypeId", "questionGuid" ]
-          }
-        },
-        "username" : {
-          "type" : "string",
-          "description" : "Username of the person registering"
         }
       }
     },
@@ -3088,32 +3156,6 @@
         "username" : {
           "type" : "string",
           "description" : "Username of the person placing the order"
-        }
-      }
-    },
-    "CartFacilityTimeSuccess" : {
-      "type" : "object",
-      "properties" : {
-        "result" : {
-          "type" : "object",
-          "properties" : {
-            "ExpirationTime" : {
-              "type" : "string",
-              "description" : "Cart facility expiration time"
-            },
-            "CurrentDate" : {
-              "type" : "string",
-              "description" : "Current date and time"
-            }
-          }
-        },
-        "success" : {
-          "type" : "boolean",
-          "description" : "true"
-        },
-        "message" : {
-          "type" : "string",
-          "description" : "County status fetched successfully."
         }
       }
     }
