@@ -1,7 +1,7 @@
 {
   "swagger" : "2.0",
   "info" : {
-    "version" : "2024-09-21T12:59:04Z",
+    "version" : "2024-09-21T15:45:54Z",
     "title" : "dev-cart"
   },
   "host" : "rest.mycountyparks.com",
@@ -548,6 +548,36 @@
         } ]
       }
     },
+    "/facility-amount/{cartId}" : {
+      "get" : {
+        "summary" : "Get Facility Cart Amount",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "cartId",
+          "in" : "query",
+          "description" : "Cart Id",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/FacilityCartAmountSuccess"
+            }
+          },
+          "500" : {
+            "description" : "500 response",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorModel"
+            }
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      }
+    },
     "/facility-checkout" : {
       "post" : {
         "responses" : { },
@@ -1050,6 +1080,64 @@
             "description" : "200 response",
             "schema" : {
               "$ref" : "#/definitions/OrderReceiptSuccess"
+            }
+          },
+          "500" : {
+            "description" : "500 response",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorModel"
+            }
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      }
+    },
+    "/reservation-name/{id}" : {
+      "get" : {
+        "summary" : "Get Event Reservation Name",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Registration Name Id",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/SuccessModel"
+            }
+          },
+          "500" : {
+            "description" : "500 response",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorModel"
+            }
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      },
+      "delete" : {
+        "summary" : "Delete Event Reservation Name",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "Reservation Id",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/ReservationSuccess"
             }
           },
           "500" : {
@@ -1923,6 +2011,45 @@
         }
       }
     },
+    "FacilityCartAmountSuccess" : {
+      "type" : "object",
+      "properties" : {
+        "result" : {
+          "type" : "object",
+          "properties" : {
+            "FacilityID" : {
+              "type" : "string"
+            },
+            "NoOfDays" : {
+              "type" : "integer"
+            },
+            "Message" : {
+              "type" : "string"
+            },
+            "DisplayBIT" : {
+              "type" : "integer"
+            },
+            "Amount" : {
+              "type" : "string"
+            },
+            "Total" : {
+              "type" : "string"
+            },
+            "FlagDisplay" : {
+              "type" : "integer"
+            }
+          }
+        },
+        "success" : {
+          "type" : "boolean",
+          "description" : "true"
+        },
+        "message" : {
+          "type" : "string",
+          "description" : "Cart facility amount fetched successfully."
+        }
+      }
+    },
     "EventOrderData" : {
       "type" : "object",
       "required" : [ "adults", "cartId", "children", "eventId", "flagAdminOrder", "registrationId", "username" ],
@@ -1996,6 +2123,63 @@
         "username" : {
           "type" : "string",
           "description" : "Username of the person registering"
+        }
+      }
+    },
+    "ReservationSuccess" : {
+      "type" : "object",
+      "properties" : {
+        "result" : {
+          "type" : "array",
+          "items" : {
+            "type" : "object",
+            "properties" : {
+              "RegistrationNameID" : {
+                "type" : "string",
+                "description" : "The id of the registration"
+              },
+              "Type" : {
+                "type" : "string",
+                "description" : "Event attendee Type Eg (Children, Adult)"
+              },
+              "FlagWaiver" : {
+                "type" : "string",
+                "description" : "Yes Or NO"
+              },
+              "ShoeSize" : {
+                "type" : "string",
+                "description" : "Shoe Size of the event attendee"
+              },
+              "NameLast" : {
+                "type" : "string",
+                "description" : "Last name of the event attendee"
+              },
+              "Waiver" : {
+                "type" : "string",
+                "description" : "Waiver"
+              },
+              "NameFirst" : {
+                "type" : "string",
+                "description" : "First name of the event attendee"
+              },
+              "ShirtSize" : {
+                "type" : "string",
+                "description" : "Shirt Size of the event attendee"
+              },
+              "Age" : {
+                "type" : "string",
+                "description" : "Age of the event attendee"
+              }
+            }
+          }
+        },
+        "success" : {
+          "type" : "boolean",
+          "description" : "true"
+        },
+        "message" : {
+          "type" : "string",
+          "description" : "Reservation name fetched successfully."
         }
       }
     },
