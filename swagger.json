@@ -1,7 +1,7 @@
 {
   "swagger" : "2.0",
   "info" : {
-    "version" : "2024-09-21T15:45:54Z",
+    "version" : "2024-09-23T10:37:01Z",
     "title" : "dev-cart"
   },
   "host" : "rest.mycountyparks.com",
@@ -1992,6 +1992,10 @@
         "parkToAddInvalidCart" : {
           "type" : "integer",
           "description" : "park to add in invalid cart"
+        },
+        "role" : {
+          "type" : "string",
+          "description" : "Role of the person registering"
         },
         "cartId" : {
           "type" : "string",
