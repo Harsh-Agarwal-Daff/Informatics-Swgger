@@ -1,7 +1,7 @@
 {
   "swagger" : "2.0",
   "info" : {
-    "version" : "2024-09-23T10:37:01Z",
+    "version" : "2024-09-25T07:58:21Z",
     "title" : "dev-cart"
   },
   "host" : "rest.mycountyparks.com",
@@ -196,14 +196,48 @@
         } ]
       }
     },
-    "/county-status/{cartId}" : {
+    "/county-status" : {
       "get" : {
         "summary" : "Get County Status By Cart ID",
         "produces" : [ "application/json" ],
         "parameters" : [ {
+          "name" : "countyId",
+          "in" : "query",
+          "description" : "County Id",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "cartId",
+          "in" : "query",
+          "description" : "Cart Item Id",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/CountyStatusSuccess"
+            }
+          },
+          "500" : {
+            "description" : "500 response",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorModel"
+            }
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      }
+    },
+    "/county-status/{cartId}" : {
+      "get" : {
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
           "name" : "cartId",
           "in" : "path",
-          "description" : "Cart Item Id",
           "required" : true,
           "type" : "string"
         } ],
@@ -813,10 +847,16 @@
         "summary" : "Get County Status By Cart ID",
         "produces" : [ "application/json" ],
         "parameters" : [ {
+          "name" : "countyId",
+          "in" : "query",
+          "description" : "County Id",
+          "required" : false,
+          "type" : "string"
+        }, {
           "name" : "cartId",
-          "in" : "path",
+          "in" : "query",
           "description" : "Cart Item Id",
-          "required" : true,
+          "required" : false,
           "type" : "string"
         } ],
         "responses" : {
@@ -1200,6 +1240,38 @@
         } ]
       }
     },
+    "/send-receipt" : {
+      "post" : {
+        "summary" : "Send Email Receipt",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "SendEmailData",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/SendEmailData"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/SuccessModel"
+            }
+          },
+          "404" : {
+            "description" : "404 response",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorModel"
+            }
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      }
+    },
     "/session-cart/{cartId}" : {
       "delete" : {
         "summary" : "Delete Session Cart By Cart Id",
@@ -1523,6 +1595,20 @@
         "message" : {
           "type" : "string",
           "description" : "Cart time has been reset successfully"
+        }
+      }
+    },
+    "SendEmailData" : {
+      "type" : "object",
+      "required" : [ "orderId", "receiverMail" ],
+      "properties" : {
+        "orderId" : {
+          "type" : "string",
+          "description" : "The id of the order"
+        },
+        "receiverMail" : {
+          "type" : "string",
+          "description" : "The receiver mail address"
         }
       }
     },
@@ -2056,7 +2142,7 @@
     },
     "EventOrderData" : {
       "type" : "object",
-      "required" : [ "adults", "cartId", "children", "eventId", "flagAdminOrder", "registrationId", "username" ],
+      "required" : [ "adults", "cartId", "children", "eventId", "flagAdminOrder", "registrationId", "registrationType", "username" ],
       "properties" : {
         "teamName" : {
           "type" : "string",
@@ -2070,13 +2156,13 @@
           "type" : "integer",
           "description" : "Unique identifier for the event"
         },
-        "userRegistrationType" : {
-          "type" : "string",
-          "description" : "Type of registration for the user"
-        },
         "children" : {
           "type" : "integer",
           "description" : "Number of children attending"
+        },
+        "registrationType" : {
+          "type" : "string",
+          "description" : "Type of registration for the user"
         },
         "familyFee" : {
           "type" : "number",
@@ -2123,6 +2209,10 @@
             },
             "required" : [ "answer", "answerTypeId", "questionGuid" ]
           }
+        },
+        "url" : {
+          "type" : "string",
+          "description" : "url"
         },
         "username" : {
           "type" : "string",
