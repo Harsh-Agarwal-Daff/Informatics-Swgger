@@ -1,7 +1,7 @@
 {
   "swagger" : "2.0",
   "info" : {
-    "version" : "2024-09-26T10:20:52Z",
+    "version" : "2024-10-09T13:34:31Z",
     "title" : "dev-cart"
   },
   "host" : "rest.mycountyparks.com",
@@ -209,7 +209,7 @@
         }, {
           "name" : "cartId",
           "in" : "query",
-          "description" : "Cart Item Id",
+          "description" : "Cart Id",
           "required" : false,
           "type" : "string"
         } ],
@@ -331,15 +331,9 @@
         "summary" : "Get Event Attendee",
         "produces" : [ "application/json" ],
         "parameters" : [ {
-          "name" : "eventId",
-          "in" : "query",
-          "description" : "Event Id",
-          "required" : true,
-          "type" : "string"
-        }, {
           "name" : "cartId",
           "in" : "query",
-          "description" : "Cart Item Id",
+          "description" : "Cart Id",
           "required" : true,
           "type" : "string"
         } ],
@@ -827,7 +821,7 @@
         }, {
           "name" : "cartId",
           "in" : "query",
-          "description" : "Cart Item Id",
+          "description" : "Cart Id",
           "required" : false,
           "type" : "string"
         } ],
@@ -2105,7 +2099,7 @@
     },
     "DeleteEventOrderData" : {
       "type" : "object",
-      "required" : [ "cartId", "registrationId", "username" ],
+      "required" : [ "cartId", "registrationId" ],
       "properties" : {
         "previousItemURLInvalidCart" : {
           "type" : "string",
@@ -2258,12 +2252,8 @@
     },
     "SendFullEmailData" : {
       "type" : "object",
-      "required" : [ "eventId", "orderId" ],
+      "required" : [ "orderId" ],
       "properties" : {
-        "eventId" : {
-          "type" : "string",
-          "description" : "The event id"
-        },
         "orderId" : {
           "type" : "string",
           "description" : "The id of the order"
@@ -2548,7 +2538,7 @@
           "description" : "State for the user's address"
         },
         "fax" : {
-          "type" : "integer",
+          "type" : "string",
           "description" : "Fax number for the user"
         },
         "email" : {
@@ -3148,7 +3138,7 @@
     },
     "ModifyEventOrderData" : {
       "type" : "object",
-      "required" : [ "adultCount", "cartId", "childrenCount", "registrationId", "username" ],
+      "required" : [ "adultCount", "cartId", "childrenCount", "registrationId" ],
       "properties" : {
         "adultCount" : {
           "type" : "integer",
@@ -3315,7 +3305,7 @@
           "description" : "Last Name of the user"
         },
         "orderId" : {
-          "type" : "integer",
+          "type" : "string",
           "description" : "The id of the order"
         },
         "donationId" : {
