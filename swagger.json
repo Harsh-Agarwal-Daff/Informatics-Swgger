@@ -1,7 +1,7 @@
 {
   "swagger" : "2.0",
   "info" : {
-    "version" : "2024-10-09T13:34:31Z",
+    "version" : "2024-10-10T11:43:42Z",
     "title" : "dev-cart"
   },
   "host" : "rest.mycountyparks.com",
@@ -1343,6 +1343,36 @@
           "required" : true,
           "schema" : {
             "$ref" : "#/definitions/InsertTempOrderData"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/SuccessModel"
+            }
+          },
+          "404" : {
+            "description" : "404 response",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorModel"
+            }
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      },
+      "put" : {
+        "summary" : "Modify Temp Order Cart",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "ModifyTempOrderData",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/ModifyTempOrderData"
           }
         } ],
         "responses" : {
@@ -3108,6 +3138,44 @@
         "message" : {
           "type" : "string",
           "description" : "Order receipt build successfully"
+        }
+      }
+    },
+    "ModifyTempOrderData" : {
+      "type" : "object",
+      "required" : [ "token" ],
+      "properties" : {
+        "authCode" : {
+          "type" : "string",
+          "description" : "AuthCode associated with the order"
+        },
+        "cardName" : {
+          "type" : "string",
+          "description" : "Name on the card"
+        },
+        "cardType" : {
+          "type" : "string",
+          "description" : "Type of the card used for payment"
+        },
+        "orderDescription" : {
+          "type" : "string",
+          "description" : "Description associated with the order"
+        },
+        "cardNumber" : {
+          "type" : "string",
+          "description" : "Card number"
+        },
+        "transactionId" : {
+          "type" : "string",
+          "description" : "Transaction ID associated with the order"
+        },
+        "token" : {
+          "type" : "string",
+          "description" : "Token associated with the order"
+        },
+        "username" : {
+          "type" : "string",
+          "description" : "Username of the person placing the order"
         }
       }
     },
