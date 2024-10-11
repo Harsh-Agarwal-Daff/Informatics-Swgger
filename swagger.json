@@ -1,7 +1,7 @@
 {
   "swagger" : "2.0",
   "info" : {
-    "version" : "2024-10-11T12:52:55Z",
+    "version" : "2024-10-11T13:19:53Z",
     "title" : "dev-cart"
   },
   "host" : "rest.mycountyparks.com",
@@ -636,6 +636,38 @@
           },
           "500" : {
             "description" : "500 response",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorModel"
+            }
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      }
+    },
+    "/generate-receipt" : {
+      "post" : {
+        "summary" : "Generate Receipt",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "GenerateReceiptData",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/GenerateReceiptData"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/SuccessModel"
+            }
+          },
+          "404" : {
+            "description" : "404 response",
             "schema" : {
               "$ref" : "#/definitions/ErrorModel"
             }
@@ -1569,6 +1601,65 @@
     }
   },
   "definitions" : {
+    "GenerateReceiptData" : {
+      "type" : "object",
+      "required" : [ "activity", "authorizeNetLogId", "cartId", "orderId", "processId", "userCreated", "validPayment" ],
+      "properties" : {
+        "authCode" : {
+          "type" : "string",
+          "description" : "Authorization code for the payment"
+        },
+        "activity" : {
+          "type" : "string",
+          "description" : "Log Activity data"
+        },
+        "orderId" : {
+          "type" : "string",
+          "description" : "Unique identifier for the order"
+        },
+        "cartId" : {
+          "type" : "string",
+          "description" : "Unique identifier for the cart"
+        },
+        "authorizeNetLogId" : {
+          "type" : "integer",
+          "description" : "Log ID for Authorize.Net transactions"
+        },
+        "errorMessage" : {
+          "type" : "string",
+          "description" : "Error message if the payment fails"
+        },
+        "validPayment" : {
+          "type" : "boolean",
+          "description" : "Indicates whether the payment is valid"
+        },
+        "flagOrgEvent" : {
+          "type" : "boolean",
+          "description" : "Flag indicating if this is an organizational event"
+        },
+        "userCreated" : {
+          "type" : "string",
+          "description" : "Identifier for the user who created the order"
+        },
+        "transactionId" : {
+          "type" : "string",
+          "description" : "Unique identifier for the payment transaction"
+        },
+        "machineName" : {
+          "type" : "string",
+          "description" : "Name of the machine used to create the order",
+          "default" : ""
+        },
+        "responseCode" : {
+          "type" : "string",
+          "description" : "Response code from the payment gateway"
+        },
+        "processId" : {
+          "type" : "string",
+          "description" : "Unique identifier for the process"
+        }
+      }
+    },
     "CountyStatusSuccess" : {
       "type" : "object",
       "properties" : {
