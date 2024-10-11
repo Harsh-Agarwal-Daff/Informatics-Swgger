@@ -1,7 +1,7 @@
 {
   "swagger" : "2.0",
   "info" : {
-    "version" : "2024-10-10T11:43:42Z",
+    "version" : "2024-10-11T12:52:55Z",
     "title" : "dev-cart"
   },
   "host" : "rest.mycountyparks.com",
@@ -1018,6 +1018,38 @@
           },
           "500" : {
             "description" : "500 response",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorModel"
+            }
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      }
+    },
+    "/payment-log" : {
+      "post" : {
+        "summary" : "Insert Payment Log",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "InsertPaymentLogData",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/InsertPaymentLogData"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/SuccessModel"
+            }
+          },
+          "404" : {
+            "description" : "404 response",
             "schema" : {
               "$ref" : "#/definitions/ErrorModel"
             }
@@ -2769,6 +2801,64 @@
         "message" : {
           "type" : "string",
           "description" : "success message"
+        }
+      }
+    },
+    "InsertPaymentLogData" : {
+      "type" : "object",
+      "required" : [ "activityMsg", "countyId", "errMsg", "fullErrMsg", "itemId", "itemType", "sessionId", "tempOrderId", "url" ],
+      "properties" : {
+        "logType" : {
+          "type" : "string",
+          "description" : "Type of log entry"
+        },
+        "activityMsg" : {
+          "type" : "string",
+          "description" : "Message describing the activity"
+        },
+        "itemType" : {
+          "type" : "string",
+          "description" : "Type of the item"
+        },
+        "errMsg" : {
+          "type" : "string",
+          "description" : "Error message if applicable"
+        },
+        "fullErrMsg" : {
+          "type" : "string",
+          "description" : "Full error message if applicable"
+        },
+        "sessionId" : {
+          "type" : "string",
+          "description" : "Session identifier"
+        },
+        "url" : {
+          "type" : "string",
+          "description" : "URL associated with the log entry"
+        },
+        "token" : {
+          "type" : "string",
+          "description" : "Payment Token"
+        },
+        "itemId" : {
+          "type" : "integer",
+          "description" : "Identifier for the item"
+        },
+        "tempOrderId" : {
+          "type" : "string",
+          "description" : "Temporary Order Id"
+        },
+        "flagTempOrder" : {
+          "type" : "integer",
+          "description" : "Flag for temporary order"
+        },
+        "countyId" : {
+          "type" : "integer",
+          "description" : "Identifier for the county"
+        },
+        "username" : {
+          "type" : "string",
+          "description" : "Username of the person who created the log"
         }
       }
     },
