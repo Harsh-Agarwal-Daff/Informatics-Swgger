@@ -1,7 +1,7 @@
 {
   "swagger" : "2.0",
   "info" : {
-    "version" : "2024-10-11T13:19:53Z",
+    "version" : "2024-10-17T11:44:59Z",
     "title" : "dev-cart"
   },
   "host" : "rest.mycountyparks.com",
@@ -581,6 +581,38 @@
     "/facility-checkout" : {
       "post" : {
         "responses" : { },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      }
+    },
+    "/facility-status" : {
+      "post" : {
+        "summary" : "Is Facility Date Available",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "FacilityDateData",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/FacilityDateData"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/SuccessModel"
+            }
+          },
+          "404" : {
+            "description" : "404 response",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorModel"
+            }
+          }
+        },
         "security" : [ {
           "api_key" : [ ]
         } ]
@@ -1848,6 +1880,37 @@
         "responseCode" : {
           "type" : "string",
           "description" : "Response code from the payment gateway"
+        }
+      }
+    },
+    "FacilityDateData" : {
+      "type" : "object",
+      "required" : [ "cartId", "dates", "facilityId" ],
+      "properties" : {
+        "facilityId" : {
+          "type" : "integer",
+          "description" : "Unique identifier for the event"
+        },
+        "cartId" : {
+          "type" : "string",
+          "description" : "Identifier for the shopping cart"
+        },
+        "dates" : {
+          "type" : "array",
+          "items" : {
+            "type" : "object",
+            "properties" : {
+              "fromDate" : {
+                "type" : "string",
+                "description" : "From Date"
+              },
+              "toDate" : {
+                "type" : "string",
+                "description" : "To Date"
+              }
+            },
+            "required" : [ "fromDate", "toDate" ]
+          }
         }
       }
     },
